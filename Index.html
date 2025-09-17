@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Jora - Nightclub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1:#040405;           /* casi negro */
+      --bg-2:#0b0b0c;
+      --orange:#ff7a00;        /* color del logo/anaranjado */
+      --orange-2:#ff9b3d;
+      --glass: rgba(255,255,255,0.03);
+      font-family: 'Montserrat', sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background: radial-gradient(circle at 10% 10%, rgba(255,122,0,0.04) 0%, transparent 8%),
+                  linear-gradient(180deg,var(--bg-1), var(--bg-2));
+      color:#eee;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      -webkit-touch-callout: none; /* Evita menú largo en iOS */
+    }
+
+    /* ===== NAV ===== */
+    header{
+      position:fixed;left:0;right:0;top:0;z-index:60;
+      display:flex;align-items:center;justify-content:space-between;padding:12px 18px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.12));
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo img{height:36px;display:block;filter:drop-shadow(0 0 8px var(--orange));border-radius:6px;animation:logoNeon 2.6s infinite alternate}
+    @keyframes logoNeon{from{filter:drop-shadow(0 0 6px var(--orange))}to{filter:drop-shadow(0 0 20px var(--orange))}}
+
+    nav{display:flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--orange), var(--orange-2));border:none;padding:10px 14px;border-radius:10px;color:#111;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(255,122,0,0.14);transition:transform .18s ease,box-shadow .18s}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(255,122,0,0.18)}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px 10px;border-radius:10px}
+
+    /* ===== HERO ===== */
+    .hero{min-height:100vh;display:grid;place-items:center;padding:110px 18px 80px;position:relative;z-index:1}
+    .container{max-width:1100px;width:100%;display:grid;grid-template-columns:1fr;gap:18px;align-items:center;text-align:center}
+
+    .left h1{font-size:56px;line-height:0.95;margin:0;text-transform:uppercase;letter-spacing:2px}
+    .neon{color:var(--orange);text-shadow:0 2px 16px rgba(255,122,0,0.25),0 0 32px rgba(255,122,0,0.08);}
+    .subtitle{font-size:13px;margin-top:8px;color:rgba(255,255,255,0.85);font-weight:600;letter-spacing:1px}
+
+    /* entrada (fade + zoom) */
+    .title-wrap{opacity:0;transform:scale(0.95) translateY(8px);transition:all .55s cubic-bezier(.2,.9,.3,1);}
+    .title-wrap.show{opacity:1;transform:scale(1) translateY(0)}
+
+    /* efecto glitch suave */
+    .glitch{display:inline-block;position:relative}
+    .glitch::before, .glitch::after{
+      content:attr(data-text);
+      position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;pointer-events:none;opacity:0.6;
+      mix-blend-mode:screen;
+    }
+    .glitch::before{color:var(--orange);transform:translateX(-1px);filter:blur(.4px);opacity:0.7}
+    .glitch::after{color:#00e6ff;transform:translateX(1px);filter:blur(.6px);opacity:0.35}
+    @keyframes softGlitch{0%,100%{transform:translateX(0);opacity:1}45%{transform:translateX(-1px);opacity:0.9}50%{transform:translateX(1px);opacity:0.95}}
+    .glitch{animation:softGlitch 3s infinite ease-in-out}
+
+    .lead{color:rgba(255,255,255,0.8);margin:16px 0 8px;font-weight:300}
+    .cta-row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);max-width:640px;margin:12px auto}
+
+    /* ===== SLIDESHOW (reemplaza placeholder) ===== */
+    .slideshow{position:relative;width:100%;height:320px;border-radius:10px;overflow:hidden;border:3px solid rgba(255,140,0,0.95);box-shadow:0 12px 40px rgba(255,122,0,0.14), inset 0 0 40px rgba(255,140,0,0.06);}
+    .slideshow img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease-in-out;user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}
+    .slideshow img.active{opacity:1}
+
+    /* ===== Spotlights (luces movibles) ===== */
+    .spotlights{pointer-events:none;position:fixed;inset:0;z-index:0;mix-blend-mode:screen}
+    .spot{position:absolute;filter:blur(40px);opacity:0.28}
+    .spot.one{width:420px;height:420px;background:radial-gradient(circle, rgba(255,122,0,0.95) 0%, rgba(255,122,0,0.25) 20%, transparent 60%);left:-100px;top:40px;animation:move1 12s linear infinite}
+    .spot.two{width:320px;height:320px;background:radial-gradient(circle, rgba(0,140,255,0.85) 0%, rgba(0,140,255,0.18) 18%, transparent 60%);right:-80px;top:10%;animation:move2 14s linear infinite}
+    .spot.three{width:520px;height:520px;background:radial-gradient(circle, rgba(200,0,255,0.85) 0%, rgba(200,0,255,0.12) 18%, transparent 60%);left:40%;bottom:-120px;animation:move3 18s linear infinite}
+    @keyframes move1{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(40px) translateX(60px)}100%{transform:translateY(0) translateX(0)}}
+    @keyframes move2{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-60px) translateX(-80px)}100%{transform:translateY(0) translateX(0)}}
+    @keyframes move3{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-80px) translateX(90px)}100%{transform:translateY(0) translateX(0)}}
+
+    #particles{position:fixed;inset:0;z-index:0}
+
+    /* ===== Reveal (scroll animations) ===== */
+    .reveal{opacity:0;transform:translateY(20px);transition:all .65s cubic-bezier(.2,.9,.3,1);}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    .register-float{position:fixed;left:50%;transform:translateX(-50%);bottom:-90px;z-index:80;transition:bottom .6s cubic-bezier(.2,.9,.3,1),opacity .4s;opacity:0}
+    .register-float.show{bottom:24px;opacity:1}
+    .register-float .pill{display:flex;gap:12px;align-items:center;background:linear-gradient(90deg,var(--orange),var(--orange-2));padding:12px 18px;border-radius:999px;color:#111;font-weight:800;box-shadow:0 18px 40px rgba(255,122,0,0.18)}
+
+    section.info{padding:60px 18px;background:linear-gradient(180deg,transparent, rgba(255,122,0,0.02));}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1100px;margin:0 auto}
+    .feature{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .feature h3{color:var(--orange);margin-bottom:8px}
+
+    footer{padding:36px 20px;text-align:center;color:rgba(255,255,255,0.5)}
+
+    @media(max-width:980px){
+      .left h1{font-size:44px}
+      .grid{grid-template-columns:1fr}
+      .slideshow{height:220px}
+      .card{padding:12px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="logo.png" alt="Jora logo"></div>
+    <nav>
+      <button class="ghost">Eventos</button>
+      <button class="ghost">Cartelera</button>
+      <button class="btn" id="toRegister">Regístrate</button>
+    </nav>
+  </header>
+
+  <div class="spotlights" aria-hidden="true">
+    <div class="spot one"></div>
+    <div class="spot two"></div>
+    <div class="spot three"></div>
+  </div>
+  <canvas id="particles"></canvas>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="left">
+          <!-- título con entrada y subtítulo -->
+          <div class="title-wrap" id="titleWrap">
+            <h1 class="neon glitch" data-text="JORA">JORA</h1>
+            <div class="subtitle glitch" data-text="Discoteck">Discoteck</div>
+          </div>
+
+          <div class="card reveal" id="photoCard">
+            <!-- slideshow centrado con borde neón -->
+            <div class="slideshow" id="slideshow">
+              <img src="foto1.jpg" alt="Foto Jora 1" class="active" draggable="false">
+              <img src="foto2.jpg" alt="Foto Jora 2" draggable="false">
+              <img src="foto3.jpg" alt="Foto Jora 3" draggable="false">
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:8px;justify-content:space-between;align-items:center">
+              <div style="font-weight:700;color:rgba(255,255,255,0.8)" class="reveal">Gana puntos por asistencia y por compras</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.45)" class="reveal">Sistema con QR único</div>
+            </div>
+          </div>
+
+          <p class="lead reveal">La experiencia nocturna que juega contigo. Regístrate, gana puntos con tu QR y canjéalos por bebidas. ¡La noche es tuya!</p>
+          <div class="cta-row reveal">
+            <button class="btn" id="cta-register">Crear mi QR</button>
+            <button class="ghost">Ver cartelera</button>
+          </div>
+          <div style="margin-top:18px;color:rgba(255,255,255,0.6)" class="reveal">¿Eres del staff? <a href="admin.html" style="color:var(--orange);font-weight:700">Panel Admin</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="info">
+      <div class="grid">
+        <div class="feature reveal">
+          <h3>Juego + Recompensas</h3>
+          <p>Cada usuario recibe un QR personal. Al entrar o al comprar, muestra tu QR y gana puntos. Acumula y canjea por bebidas.</p>
+        </div>
+        <div class="feature reveal">
+          <h3>Registro rápido</h3>
+          <p>Registro simple desde tu móvil. Al registrarte generamos tu QR único y tu perfil de puntos.</p>
+        </div>
+        <div class="feature reveal">
+          <h3>Panel para barra</h3>
+          <p>El personal escanea QRs desde admin.html para asignar puntos al instante. Fácil, rápido y seguro.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="register-float" id="registerFloat" aria-hidden="true">
+    <div class="pill" role="button" tabindex="0" id="floatBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="transform:translateY(-1px)"><path d="M12 2a7 7 0 100 14 7 7 0 000-14z" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Regístrate y obtén tu QR
+    </div>
+  </div>
+
+  <footer>
+    &copy; Jora Club — Diseñado para ser llamativo. Imágenes y contenidos se agregan luego.
+  </footer>
+
+  <script>
+    // ===== Partículas (canvas) =====
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const resize = ()=>{ canvas.width = innerWidth; canvas.height = innerHeight; }
+    window.addEventListener('resize', resize); resize();
+
+    function rand(min,max){return Math.random()*(max-min)+min}
+    function createParticles(){
+      particles = [];
+      const count = Math.round((canvas.width * canvas.height) / 90000);
+      for(let i=0;i<count;i++){
+        particles.push({x:rand(0,canvas.width),y:rand(0,canvas.height),r:rand(0.6,2.2),vx:rand(-0.3,0.3),vy:rand(-0.2,0.2)})
+      }
+    }
+    createParticles();
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let p of particles){
+        p.x += p.vx; p.y += p.vy;
+        if(p.x<0) p.x = canvas.width; if(p.x>canvas.width) p.x=0;
+        if(p.y<0) p.y = canvas.height; if(p.y>canvas.height) p.y=0;
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(255,122,0,0.06)';
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+      }
+      for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+          const a=particles[i], b=particles[j];
+          const dx=a.x-b.x, dy=a.y-b.y; const d=Math.sqrt(dx*dx+dy*dy);
+          if(d<110){
+            ctx.beginPath(); ctx.strokeStyle = 'rgba(255,122,0,'+(0.08-(d/110)*0.07)+')'; ctx.lineWidth=0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+    window.addEventListener('resize', ()=>{createParticles()});
+
+    // ===== Mostrar boton flotante al hacer scroll =====
+    const registerFloat = document.getElementById('registerFloat');
+    let shown=false;
+    window.addEventListener('scroll', ()=>{
+      const y = window.scrollY || window.pageYOffset;
+      if(y>120 && !shown){ registerFloat.classList.add('show'); shown=true; }
+      if(y<100 && shown){ registerFloat.classList.remove('show'); shown=false; }
+    });
+
+    // ===== Enlaces al registro =====
+    document.getElementById('toRegister').addEventListener('click', ()=>{ window.location.href='registrar.html'; });
+    document.getElementById('cta-register').addEventListener('click', ()=>{ window.location.href='registrar.html'; });
+    document.getElementById('floatBtn').addEventListener('click', ()=>{ window.location.href='registrar.html'; });
+
+    // ===== Animación de título (entrada) =====
+    const titleWrap = document.getElementById('titleWrap');
+    window.addEventListener('load', ()=>{ setTimeout(()=> titleWrap.classList.add('show'), 180); });
+
+    // ===== Slideshow automático (fade cada 3s) =====
+    const slides = document.querySelectorAll('#slideshow img');
+    let current = 0;
+    function nextSlide(){
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }
+    let slideInterval = setInterval(nextSlide, 3000);
+
+    // Evitar descarga/menú contextual en imágenes (no garantiza 100%)
+    document.addEventListener('contextmenu', (e)=>{ if(e.target && e.target.tagName === 'IMG') e.preventDefault(); });
+
+    // Prevent dragging images
+    document.querySelectorAll('img').forEach(img=>{ img.ondragstart = ()=> false; });
+
+    // ===== Scroll reveals con IntersectionObserver =====
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, {threshold:0.12});
+    revealEls.forEach(el=> io.observe(el));
+
+    // ===== Parpadeo/neon suave ya está por CSS (glitch) =====
+    // ===== Nota: para mayor control del "glitch" se puede ajustar la animación CSS =====
+  </script>
+</body>
+</html>
