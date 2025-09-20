@@ -104,11 +104,57 @@
 
     footer{padding:36px 20px;text-align:center;color:rgba(255,255,255,0.5)}
 
+    /* ===== ADICIONES: cajas brillantes, flyers y contacto ===== */
+    .reservas-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+    .reservas-row .res-card{flex:1 1 320px;max-width:480px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:2px solid var(--orange);padding:18px;border-radius:12px;box-shadow:0 18px 50px rgba(255,122,0,0.16);text-align:left}
+    .reservas-row .res-card h3{color:var(--orange);margin:0 0 8px;font-size:18px}
+    .reservas-row .res-card p{color:#ddd;margin:0;font-size:14px;line-height:1.4}
+
+    .flyers-area {
+  max-width: 100%;
+  margin: 28px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  padding: 0 12px;
+}
+
+.flyer-vertical {
+  width: 100%;
+  max-width: 520px;
+  min-height: 609px;
+  border-radius: 20px; /* 👈 bordes ovalados */
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(255, 136, 0, 0.4); /* 👈 sombra anaranjada flotante */
+}
+
+.flyer-vertical img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* mantiene proporción original */
+  border-radius: 20px; /* 👈 bordes ovalados también en la imagen */
+  display: block;
+}
+
+
+
+
+    .flyer-note{color:#ccc;text-align:center;font-size:13px;margin:10px 0 6px}
+
+    .contacto{padding:36px 18px;text-align:center;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);margin-top:30px}
+    .contacto h2{color:var(--orange);margin-bottom:12px}
+    .contacto p{margin:6px 0;color:#ccc}
+    .contacto .map-wrap{margin-top:18px;display:flex;justify-content:center}
+    .contacto iframe{width:100%;max-width:720px;height:370px;border:0;border-radius:10px;box-shadow:0 18px 45px rgba(255,122,0,0.12)}
+
     @media(max-width:980px){
       .left h1{font-size:44px}
       .grid{grid-template-columns:1fr}
       .slideshow{height:220px}
       .card{padding:12px}
+      .reservas-row{flex-direction:column;align-items:center}
+      .flyer-vertical{height:320px}
     }
   </style>
 </head>
@@ -117,7 +163,7 @@
     <div class="logo"><img src="imagenes/LogoJora.png" alt="Jora logo"></div>
     <nav>
       <button class="ghost">Eventos</button>
-      <button class="ghost">Cartelera</button>
+      <button class="ghost">Redes</button>
       <button class="btn" id="toRegister">Regístrate</button>
     </nav>
   </header>
@@ -149,12 +195,27 @@
             </div>
 
             <div style="margin-top:12px;display:flex;gap:8px;justify-content:space-between;align-items:center">
-              <div style="font-weight:700;color:rgba(255,255,255,0.8)" class="reveal">Gana puntos por asistencia y por compras</div>
-              <div style="font-size:12px;color:rgba(255,255,255,0.45)" class="reveal">Sistema con QR único</div>
+              <div style="font-weight:700;color:rgba(255,255,255,0.8)" class="reveal">VEN CON TUS AMIGOS A DISFRUTAR EN LA MEJOR DISCOTECA</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.45)" class="reveal">INGRESO LIBRE</div>
             </div>
           </div>
 
-          <p class="lead reveal">La experiencia nocturna que juega contigo. Regístrate, gana puntos con tu QR y canjéalos por bebidas. ¡La noche es tuya!</p>
+          <p class="lead reveal">La experiencia nocturna que juega contigo. Fiestas tematicas, luces 360°, los mejores DJs y el mejor ambiente. ¡La noche es tuya!</p>
+          <p class="lead reveal">Estamos ubicados en: Av. Francisca de la Calle 318, Huancayo</p>
+
+          <!-- === AÑADIDO: Cuadros brillantes para reservas (no removí nada) === -->
+          <div class="reservas-row">
+            <div class="res-card reveal">
+              <h3>RESERVA DE CUMPLEAÑOS</h3>
+              <p>Organiza tu cumpleaños con nosotros: mesas reservadas, atención especial, show sorpresa y beneficios para el festejado. Contáctanos para paquetes y disponibilidad.</p>
+            </div>
+            <div class="res-card reveal">
+              <h3>RESERVA VIP - BOX</h3>
+              <p>Reserva un box VIP para tu grupo: espacio privado, atención personalizada, botella incluida (según paquete) y acceso prioritario. Escríbenos para cotizar.</p>
+            </div>
+          </div>
+          <!-- === FIN RESERVAS === -->
+
           <div class="cta-row reveal">
             <button class="btn" id="cta-register">Crear mi QR</button>
             <button class="ghost">Ver cartelera</button>
@@ -164,22 +225,51 @@
       </div>
     </section>
 
+    <!-- Mantengo tu texto - ahora envuelto para poder añadir flyers debajo -->
+    <p style="text-align:center;margin:18px 12px;font-weight:600;color:#fff">Regístrate, gana TOKENS con tu QR y canjéalos por bebidas.</p>
+
+    <!-- === AÑADIDO: Bloque vertical para flyers (brillantes) === -->
+    <div class="flyers-area">
+      <div class="flyer-vertical reveal">
+        <img src="imagenes/Flayer1.jpg" alt="Flyer 1">
+      </div>
+
+      <div class="flyer-note">El personal escanea QRs desde admin.html para asignar TOKENS al instante. Fácil, rápido y seguro.</div>
+
+      <div class="flyer-vertical reveal">
+        <img src="imagenes/Flayer2.jpg" alt="Flyer 2">
+      </div>
+    </div>
+    <!-- === FIN FLYERS === -->
+
     <section class="info">
       <div class="grid">
         <div class="feature reveal">
           <h3>Juego + Recompensas</h3>
-          <p>Cada usuario recibe un QR personal. Al entrar o al comprar, muestra tu QR y gana puntos. Acumula y canjea por bebidas.</p>
+          <p>Cada usuario recibe un QR personal. Al entrar o al comprar, muestra tu QR y gana TOKENS. Acumula y canjea por bebidas.</p>
         </div>
         <div class="feature reveal">
           <h3>Registro rápido</h3>
-          <p>Registro simple desde tu móvil. Al registrarte generamos tu QR único y tu perfil de puntos.</p>
+          <p>Registro simple desde tu móvil. Al registrarte generamos tu QR único y tu perfil de TOKENS.</p>
         </div>
         <div class="feature reveal">
           <h3>Panel para barra</h3>
-          <p>El personal escanea QRs desde admin.html para asignar puntos al instante. Fácil, rápido y seguro.</p>
+          <p>El personal escanea QRs desde admin.html para asignar TOKENS al instante. Fácil, rápido y seguro.</p>
         </div>
       </div>
     </section>
+
+    <!-- === AÑADIDO: Contacto y ubicación al final del contenido (antes del footer) === -->
+    <section class="contacto">
+      <h2>Contacto y Ubicación</h2>
+      <p><strong>Dirección:</strong> Av. Francisca de la Calle 318, Huancayo</p>
+      <p><strong>Teléfono:</strong> +51 943 199 723</p>
+      <p><strong>Email:</strong> marketing@joradiscoclub.com</p>
+      <div class="map-wrap">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d670.1407893648092!2d-75.20198967856604!3d-12.04556685595215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x910e962cc499d32b%3A0xbab1005b321fdd57!2sLa%20Jora!5e0!3m2!1ses-419!2spe!4v1758348285038!5m2!1ses-419!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+    <!-- === FIN CONTACTO === -->
 
   </main>
 
@@ -191,96 +281,9 @@
   </div>
 
   <footer>
-    &copy; Jora Club — Diseñado para ser llamativo. Imágenes y contenidos se agregan luego.
+    &copy; Jora Club — Todos los derechos reservados
   </footer>
 
-  <script>
-    // ===== Partículas (canvas) =====
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    const resize = ()=>{ canvas.width = innerWidth; canvas.height = innerHeight; }
-    window.addEventListener('resize', resize); resize();
-
-    function rand(min,max){return Math.random()*(max-min)+min}
-    function createParticles(){
-      particles = [];
-      const count = Math.round((canvas.width * canvas.height) / 90000);
-      for(let i=0;i<count;i++){
-        particles.push({x:rand(0,canvas.width),y:rand(0,canvas.height),r:rand(0.6,2.2),vx:rand(-0.3,0.3),vy:rand(-0.2,0.2)})
-      }
-    }
-    createParticles();
-
-    function draw(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      for(let p of particles){
-        p.x += p.vx; p.y += p.vy;
-        if(p.x<0) p.x = canvas.width; if(p.x>canvas.width) p.x=0;
-        if(p.y<0) p.y = canvas.height; if(p.y>canvas.height) p.y=0;
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(255,122,0,0.06)';
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-      }
-      for(let i=0;i<particles.length;i++){
-        for(let j=i+1;j<particles.length;j++){
-          const a=particles[i], b=particles[j];
-          const dx=a.x-b.x, dy=a.y-b.y; const d=Math.sqrt(dx*dx+dy*dy);
-          if(d<110){
-            ctx.beginPath(); ctx.strokeStyle = 'rgba(255,122,0,'+(0.08-(d/110)*0.07)+')'; ctx.lineWidth=0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(draw);
-    }
-    draw();
-    window.addEventListener('resize', ()=>{createParticles()});
-
-    // ===== Mostrar boton flotante al hacer scroll =====
-    const registerFloat = document.getElementById('registerFloat');
-    let shown=false;
-    window.addEventListener('scroll', ()=>{
-      const y = window.scrollY || window.pageYOffset;
-      if(y>120 && !shown){ registerFloat.classList.add('show'); shown=true; }
-      if(y<100 && shown){ registerFloat.classList.remove('show'); shown=false; }
-    });
-
-    // ===== Enlaces al registro =====
-    document.getElementById('toRegister').addEventListener('click', ()=>{ window.location.href='registrar.html'; });
-    document.getElementById('cta-register').addEventListener('click', ()=>{ window.location.href='registrar.html'; });
-    document.getElementById('floatBtn').addEventListener('click', ()=>{ window.location.href='registrar.html'; });
-
-    // ===== Animación de título (entrada) =====
-    const titleWrap = document.getElementById('titleWrap');
-    window.addEventListener('load', ()=>{ setTimeout(()=> titleWrap.classList.add('show'), 180); });
-
-    // ===== Slideshow automático (fade cada 3s) =====
-    const slides = document.querySelectorAll('#slideshow img');
-    let current = 0;
-    function nextSlide(){
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }
-    let slideInterval = setInterval(nextSlide, 3000);
-
-    // Evitar descarga/menú contextual en imágenes (no garantiza 100%)
-    document.addEventListener('contextmenu', (e)=>{ if(e.target && e.target.tagName === 'IMG') e.preventDefault(); });
-
-    // Prevent dragging images
-    document.querySelectorAll('img').forEach(img=>{ img.ondragstart = ()=> false; });
-
-    // ===== Scroll reveals con IntersectionObserver =====
-    const revealEls = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, {threshold:0.12});
-    revealEls.forEach(el=> io.observe(el));
-
-    // ===== Parpadeo/neon suave ya está por CSS (glitch) =====
-    // ===== Nota: para mayor control del "glitch" se puede ajustar la animación CSS =====
-  </script>
+<script src="index.js"></script>
 </body>
 </html>
