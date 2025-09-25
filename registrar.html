@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Registrar - Jora Discoteck</title>
+
+  <!-- Font Awesome para íconos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <!-- Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -42,7 +49,7 @@
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(255,140,0,0.8), 0 0 25px rgba(255,140,0,0.4);
       width: 85%;
-      max-width: 320px;
+      max-width: 340px;
       text-align: center;
       animation: fadeIn 1s ease-in-out;
     }
@@ -54,10 +61,24 @@
       color: #ff8c00;
     }
 
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 8px 0;
+    .input-group {
+  position: relative;
+  width: 90%;
+  max-width: 280px;
+  margin: 10px auto;
+  display: flex;
+  align-items: center;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 10px 10px 10px 36px;
+}
+
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 10px 10px 36px;
       border: none;
       border-radius: 8px;
       outline: none;
@@ -68,8 +89,17 @@
       transition: 0.3s;
     }
 
-    input:focus {
+    .input-group input:focus {
       box-shadow: 0 0 8px #ff8c00;
+    }
+
+    .input-group .icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ff8c00;
+      font-size: 16px;
     }
 
     button {
@@ -108,15 +138,38 @@
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.9);
+      background: rgba(0,0,0,0.95);
       color: #fff;
-      padding: 18px 25px;
+      padding: 20px 28px;
       border-radius: 12px;
       box-shadow: 0 0 15px #ff8c00, 0 0 25px #ff6a00;
       font-size: 16px;
       display: none;
       z-index: 1000;
+      text-align: center;
       animation: popIn 0.4s ease-in-out;
+      max-width: 90%;
+    }
+
+    .popup strong {
+      font-size: 18px;
+      color: #00ff88;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .back-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      color: #ff8c00;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-icon:hover {
+      color: #ff6a00;
     }
 
     @keyframes fadeIn {
@@ -132,6 +185,7 @@
 </head>
 <body>
 
+<<<<<<< HEAD
   <!-- Video de fondo -->
   <video class="video-bg" autoplay muted loop playsinline>
     <source src="videos/discotec2vid.mp4" type="video/mp4">
@@ -139,21 +193,49 @@
   </video>
   <div class="overlay"></div>
 
+=======
+  <!-- Icono para regresar -->
+  <a href="index.html" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+
+  <!-- Contenedor principal -->
+>>>>>>> 73ecf1901c26b6e70a758c9755e84b5b6a31b4ca
   <div class="container">
     <h1>Registro</h1>
     <form id="registerForm">
-      <input type="text" placeholder="Nombre completo" required>
-      <input type="email" placeholder="Correo electrónico" required>
-      <input type="password" placeholder="Contraseña" required>
-      <input type="tel" placeholder="Número de celular" required>
+
+      <div class="input-group">
+        <i class="fas fa-user icon"></i>
+        <input type="text" placeholder="Nombre completo" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-envelope icon"></i>
+        <input type="email" placeholder="Correo electrónico" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-lock icon"></i>
+        <input type="password" placeholder="Contraseña" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-phone icon"></i>
+        <input type="tel" placeholder="Número de celular" required>
+      </div>
+
       <button type="submit">Registrarme</button>
     </form>
+
     <div class="link-login">
       ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
     </div>
   </div>
 
-  <div class="popup" id="popup">✅ Registro exitoso</div>
+  <!-- Alerta flotante -->
+  <div class="popup" id="popup">
+    <strong>✅ Registro exitoso</strong>
+    ¿Listo para bailar toda la noche? ¡Bienvenido a la fiesta!
+  </div>
 
   <script>
     const form = document.getElementById('registerForm');
@@ -162,10 +244,25 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       popup.style.display = 'block';
+<<<<<<< HEAD
+=======
+
+      // Lanzar confetis
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
+      // Redirigir después de 3 segundos
+>>>>>>> 73ecf1901c26b6e70a758c9755e84b5b6a31b4ca
       setTimeout(() => {
+        popup.style.display = 'none';
         window.location.href = "login.html";
-      }, 2000);
+      }, 3000);
     });
   </script>
+
 </body>
 </html>
+
