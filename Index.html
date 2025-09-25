@@ -203,26 +203,49 @@
           <p class="lead reveal">La experiencia nocturna que juega contigo. Fiestas tematicas, luces 360°, los mejores DJs y el mejor ambiente. ¡La noche es tuya!</p>
           <p class="lead reveal">Estamos ubicados en: Av. Francisca de la Calle 318, Huancayo</p>
 
-          <!-- === AÑADIDO: Cuadros brillantes para reservas (no removí nada) === -->
-          <div class="reservas-row">
-            <div class="res-card reveal">
-              <h3>RESERVA DE CUMPLEAÑOS</h3>
-              <p>Organiza tu cumpleaños con nosotros: mesas reservadas, atención especial, show sorpresa y beneficios para el festejado. Contáctanos para paquetes y disponibilidad.</p>
-            </div>
-            <div class="res-card reveal">
-              <h3>RESERVA VIP - BOX</h3>
-              <p>Reserva un box VIP para tu grupo: espacio privado, atención personalizada, botella incluida (según paquete) y acceso prioritario. Escríbenos para cotizar.</p>
-            </div>
-          </div>
-          <!-- === FIN RESERVAS === -->
+          <!-- === AÑADIDO: Cuadros brillantes para reservas (con imagen) === -->
+<div class="reservas-row">
+  <div class="res-card reveal">
+    <h3>RESERVA DE CUMPLEAÑOS</h3>
+    <!-- Imagen para cumpleaños -->
+    <div style="margin:10px 0">
+      <img src="imagenes/cumple.jpg" alt="Reserva cumpleaños" 
+           style="width:100%;border-radius:10px;object-fit:cover;max-height:240px">
+    </div>
+    <p>
+      Organiza tu cumpleaños con nosotros: mesas reservadas, atención especial,
+      show sorpresa y beneficios para el festejado. Contáctanos para paquetes y
+      disponibilidad.
+    </p>
+  </div>
+  <div class="res-card reveal">
+    <h3>RESERVA VIP - BOX</h3>
+    <!-- Imagen para VIP Box -->
+    <div style="margin:10px 0">
+      <img src="imagenes/vip.jpg" alt="Reserva box" 
+           style="width:100%;border-radius:10px;object-fit:contain;min-height:220px;background:#000">
+    </div>
+    <p>
+      Reserva un box VIP para tu grupo: espacio privado, atención personalizada,
+      botella incluida (según paquete) y acceso prioritario. Escríbenos para
+      cotizar.
+    </p>
+  </div>
+</div>
+<!-- === FIN RESERVAS === -->
 
-          <div class="cta-row reveal">
-            <button class="btn" id="cta-register">Crear mi QR</button>
-            <button class="ghost">Ver cartelera</button>
-          </div>
-          <div style="margin-top:18px;color:rgba(255,255,255,0.6)" class="reveal">¿Eres del staff? <a href="admin.html" style="color:var(--orange);font-weight:700">Panel Admin</a></div>
-        </div>
-      </div>
+<!-- BOTONES con más espacio abajo -->
+<div class="cta-row reveal" style="margin-top:32px">
+  <button class="btn" id="cta-register">Crear mi QR</button>
+  <button class="ghost">Ver cartelera</button>
+</div>
+
+<!-- STAFF sigue aquí 👇 -->
+<div style="margin-top:18px;color:rgba(255,255,255,0.6)" class="reveal">
+  ¿Eres del staff? <a href="admin.html" style="color:var(--orange);font-weight:700">Panel Admin</a>
+</div>
+
+
     </section>
 
     <!-- Mantengo tu texto - ahora envuelto para poder añadir flyers debajo -->
