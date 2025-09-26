@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Jora Discoteck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #ff6600;
+      --dark: #0a0a0a;
+    }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to bottom, #000, #1a1a1a);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      font-size: 28px;
+      color: var(--orange);
+      text-shadow: 0 0 8px rgba(255, 136, 0, 0.8);
+    }
+    .scanner-box {
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 1 / 1;
+      border: 3px solid var(--orange);
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(255, 136, 0, 0.4);
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #reader {
+      width: 100%;
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(255, 136, 0, 0.1);
+      border: 1px solid var(--orange);
+      box-shadow: 0 0 12px rgba(255, 136, 0, 0.3);
+      text-align: center;
+      display: none;
+    }
+    .btn {
+      margin-top: 18px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background: var(--orange);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+  <!-- librería de escaneo QR -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+  <header>
+    <h1>Panel Admin - Jora</h1>
+  </header>
+
+  <div class="scanner-box">
+    <div id="reader"></div>
+  </div>
+
+  <div class="result-box" id="resultBox">
+    <p><strong>QR Detectado:</strong> <span id="qrResult"></span></p>
+    <button class="btn" onclick="darPuntos()">Dar Puntos</button>
+  </div>
+
+  <script>
+    function onScanSuccess(decodedText) {
+      document.getElementById("qrResult").innerText = decodedText;
+      document.getElementById("resultBox").style.display = "block";
+      // Aquí más adelante conectamos con Firebase para sumar puntos al usuario
+    }
+
+    function onScanError(errorMessage) {
+      // Opcional: console.log(errorMessage);
+    }
+
+    function darPuntos() {
+      alert("✅ Puntos asignados correctamente al usuario con QR: " + document.getElementById("qrResult").innerText);
+      // Aquí después conectamos con Firebase para guardar los puntos reales
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+  </script>
+</body>
+</html>

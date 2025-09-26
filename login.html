@@ -24,6 +24,24 @@
       position: relative;
     }
 
+    .video-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Overlay negro con opacidad */
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.849); /* <<< más oscuro, antes era 0.65 */
+  z-index: -1;
+}
+
+
     /* Flecha para regresar */
     .back-icon {
       position: fixed;
@@ -190,6 +208,13 @@
   </style>
 </head>
 <body>
+
+  <video class="video-bg" autoplay muted loop playsinline>
+    <source src="videos/discotec2vid.mp4" type="video/mp4">
+    Tu navegador no soporta videos de fondo.
+  </video>
+  <div class="overlay"></div>
+
   <!-- Flecha para regresar -->
   <a href="index.html" class="back-icon" title="Regresar"><i class="fas fa-arrow-left"></i></a>
 
@@ -243,8 +268,8 @@
       // Después de 3 segundos redirigir
       setTimeout(() => {
         popup.style.display = 'none';
-        window.location.href = 'perfil.html';
-      }, 3000);
+        window.location.href = 'home.html';
+      }, 5000);
     });
   </script>
 </body>
