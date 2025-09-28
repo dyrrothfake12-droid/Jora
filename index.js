@@ -80,3 +80,11 @@ const canvas = document.getElementById('particles');
       });
     }, {threshold:0.12});
     revealEls.forEach(el=> io.observe(el));
+
+   
+function abrirModal(id) {
+  document.getElementById(id).style.display = "flex";
+}
+function cerrarModal(id) {
+  document.getElementById(id).style.display = "none";
+}

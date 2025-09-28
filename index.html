@@ -144,6 +144,7 @@
 
 
 
+
     .flyer-note{color:#ccc;text-align:center;font-size:13px;margin:10px 0 6px}
 
     .contacto{padding:36px 18px;text-align:center;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);margin-top:30px}
@@ -160,17 +161,147 @@
       .reservas-row{flex-direction:column;align-items:center}
       .flyer-vertical{height:320px}
     }
+
+
+
+
+    /* Fondo oscuro */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(6px);
+}
+
+/* Caja interna */
+.modal-content {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  max-width: 700px;
+  width: 90%;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  box-shadow: 0 18px 45px rgba(255,122,0,0.25);
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn {from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+
+/* Botón de cerrar */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: var(--orange);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #111;
+  box-shadow: 0 0 10px rgba(255,122,0,0.4);
+  transition: transform .2s;
+}
+.close-btn:hover {transform: scale(1.2)}
+
+/* Flyer grande */
+.flyer-grande img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* Carrusel de flyers pequeños */
+.flyer-carousel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.flyer-carousel img {
+  width: 120px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: transform .25s;
+}
+.flyer-carousel img:hover {transform: scale(1.1)}
+
+/* Redes */
+.redes-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+.redes-icons a {
+  display: inline-block;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background .2s;
+}
+.redes-icons a:hover {
+  background: var(--orange);
+  color: #111;
+}
+
   </style>
 </head>
 <body>
   <header>
     <div class="logo"><img src="imagenes/LogoJora.png" alt="Jora logo"></div>
     <nav>
-      <button class="ghost">Eventos</button>
-      <button class="ghost">Redes</button>
+      <button class="ghost" onclick="abrirModal('modalEventos')">Eventos</button>
+<button class="ghost" onclick="abrirModal('modalRedes')">Redes</button>
+
       <button class="btn" id="toRegister">Regístrate</button>
     </nav>
   </header>
+  <!-- Modal Eventos -->
+<div id="modalEventos" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="cerrarModal('modalEventos')">✕</button>
+    <h2>Próximos Eventos</h2>
+    <div class="flyer-grande">
+      <img src="imagenes/flayer001.jpg" alt="Evento actual">
+    </div>
+    <h3 style="margin:12px 0;color:var(--orange)">Eventos Pasados</h3>
+    <div class="flyer-carousel">
+      <img src="imagenes/flayer002.jpg" alt="Flyer 1">
+      <img src="imagenes/flayer003.jpg" alt="Flyer 2">
+      <img src="imagenes/flayer004.jpg" alt="Flyer 3">
+    </div>
+  </div>
+</div>
+
+<!-- Modal Redes -->
+<div id="modalRedes" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="cerrarModal('modalRedes')">✕</button>
+    <h2>Síguenos en Redes</h2>
+    <div class="redes-icons">
+      <a href="https://www.facebook.com/JoraDiscoteck" target="_blank">Facebook</a>
+      <a href="https://chat.whatsapp.com/L1ndM8E7qqD1VVxYzWlT9Y?mode=ems_copy_t" target="_blank">WhatsApp</a>
+      <a href="https://www.tiktok.com/@jora.discoteck.oficial" target="_blank">TikTok</a>
+      <a href="https://instagram.com/joradiscoclub" target="_blank">Instagram</a>
+    </div>
+  </div>
+</div>
+
 
   <div class="spotlights" aria-hidden="true">
     <div class="spot one"></div>
@@ -208,11 +339,10 @@
           <p class="lead reveal">Estamos ubicados en: Av. Francisca de la Calle 318, Huancayo</p>
 
 
-          <!-- === AÑADIDO: Cuadros brillantes para reservas (con imagen) === -->
+         
 <div class="reservas-row">
   <div class="res-card reveal">
     <h3>RESERVA DE CUMPLEAÑOS</h3>
-    <!-- Imagen para cumpleaños -->
     <div style="margin:10px 0">
       <img src="imagenes/cumple.jpg" alt="Reserva cumpleaños" 
            style="width:100%;border-radius:10px;object-fit:cover;max-height:240px">
@@ -237,15 +367,12 @@
     </p>
   </div>
 </div>
-<!-- === FIN RESERVAS === -->
-
-<!-- BOTONES con más espacio abajo -->
 <div class="cta-row reveal" style="margin-top:32px">
   <button class="btn" id="cta-register">Crear mi QR</button>
   <button class="ghost">Ver cartelera</button>
 </div>
 
-<!-- STAFF sigue aquí 👇 -->
+
 <div style="margin-top:18px;color:rgba(255,255,255,0.6)" class="reveal">
   ¿Eres del staff? <a href="admin.html" style="color:var(--orange);font-weight:700">Panel Admin</a>
 </div>
