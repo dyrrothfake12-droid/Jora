@@ -212,12 +212,30 @@
 .close-btn:hover {transform: scale(1.2)}
 
 /* Flyer grande */
+/* Flyer del modal Eventos */
+.flyer-grande {
+  position: relative;
+  width: 100%;
+  max-height: 420px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(255,122,0,0.25);
+}
+
 .flyer-grande img {
   width: 100%;
-  max-height: 400px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 12px;
+  border-radius: 12px;
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.flyer-grande img.active {
+  opacity: 1;
+  position: relative;
 }
 
 /* Carrusel de flyers pequeños */
@@ -321,23 +339,20 @@
       <button class="btn" id="toRegister">Regístrate</button>
     </nav>
   </header>
-  <!-- Modal Eventos -->
-<div id="modalEventos" class="modal">
+  <div id="modalEventos" class="modal">
   <div class="modal-content">
     <button class="close-btn" onclick="cerrarModal('modalEventos')">✕</button>
     <h2>Eventos</h2>
+
     <div class="flyer-grande">
-      <img src="imagenes/flayer001.jpg" alt="Evento actual">
-    </div>
-    <h3 style="margin:12px 0;color:var(--orange)">Eventos Pasados</h3>
-    
-    <div class="flyer-carousel">
-      <img src="imagenes/flayer002.jpg" alt="Flyer 1">
-      <img src="imagenes/flayer003.jpg" alt="Flyer 2">
-      <img src="imagenes/flayer004.jpg" alt="Flyer 3">
+      <img src="imagenes/flayer001.jpg" alt="Evento 1" class="active">
+      <img src="imagenes/flayer002.jpg" alt="Evento 2">
+      <img src="imagenes/flayer003.jpg" alt="Evento 3">
+      <img src="imagenes/flayer004.jpg" alt="Evento 4">
     </div>
   </div>
 </div>
+
 
 <!-- Modal Redes -->
 <div id="modalRedes" class="modal">

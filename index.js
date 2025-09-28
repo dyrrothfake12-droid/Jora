@@ -119,6 +119,13 @@ document.addEventListener("keydown", function(e) {
     document.getElementById(id).classList.remove('active');
   }
 
+  function abrirOverlay(id) {
+  document.getElementById(id).style.display = "flex";
+}
+
+function cerrarOverlay(id) {
+  document.getElementById(id).style.display = "none";
+} 
   // Intercambiar flyer principal con uno antiguo
   carteleraCarousel.addEventListener('click', (e) => {
     if (e.target.tagName === 'IMG') {
@@ -127,3 +134,56 @@ document.addEventListener("keydown", function(e) {
       e.target.src = tempSrc;
     }
   });
+
+
+
+  const flyers = [
+  "imagenes/flayer001.jpg",
+  "imagenes/flayer002.jpg",
+  "imagenes/flayer003.jpg",
+  "imagenes/flayer004.jpg"
+];
+
+let indexFlyer = 0;
+let intervalFlyer;
+
+// Abrir modal y arrancar el cambio automático
+function abrirModalEventos() {
+  document.getElementById("modalEventos").style.display = "flex";
+
+  // Iniciar rotación
+  intervalFlyer = setInterval(() => {
+    indexFlyer = (indexFlyer + 1) % flyers.length;
+    document.getElementById("flyerActual").src = flyers[indexFlyer];
+  }, 5000);
+}
+
+// Cerrar modal y detener el cambio automático
+function cerrarModal(id) {
+  document.getElementById(id).style.display = "none";
+  clearInterval(intervalFlyer); // Detener rotación al cerrar
+}
+
+
+let currentFlyer = 0;
+let flyerTimer;
+
+function abrirModalEventos() {
+  const modal = document.getElementById("modalEventos");
+  modal.style.display = "flex";
+
+  const flyers = modal.querySelectorAll(".flyer-grande img");
+  flyers.forEach((f, i) => f.classList.toggle("active", i === 0));
+  currentFlyer = 0;
+
+  flyerTimer = setInterval(() => {
+    flyers[currentFlyer].classList.remove("active");
+    currentFlyer = (currentFlyer + 1) % flyers.length;
+    flyers[currentFlyer].classList.add("active");
+  }, 5000);
+}
+
+function cerrarModal(id) {
+  document.getElementById(id).style.display = "none";
+  clearInterval(flyerTimer);
+}
