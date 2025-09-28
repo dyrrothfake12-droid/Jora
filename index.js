@@ -88,3 +88,42 @@ function abrirModal(id) {
 function cerrarModal(id) {
   document.getElementById(id).style.display = "none";
 }
+
+// Bloquear clic derecho
+document.addEventListener("contextmenu", function(e) {
+  e.preventDefault();
+});
+
+// Bloquear teclas (Ctrl+U, Ctrl+S, Ctrl+C, F12, etc.)
+document.addEventListener("keydown", function(e) {
+  if (
+    (e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "s" || e.key === "S" || e.key === "c" || e.key === "C")) ||
+    e.key === "F12"
+  ) {
+    e.preventDefault();
+  }
+});
+
+ const btnCartelera = document.getElementById('btnCartelera');
+  const overlayCartelera = document.getElementById('overlayCartelera');
+  const mainCartelera = document.getElementById('mainCartelera');
+  const carteleraCarousel = document.getElementById('carteleraCarousel');
+
+  // Abrir cartelera
+  btnCartelera.onclick = () => {
+    overlayCartelera.classList.add('active');
+  };
+
+  // Cerrar cartelera
+  function cerrarOverlay(id) {
+    document.getElementById(id).classList.remove('active');
+  }
+
+  // Intercambiar flyer principal con uno antiguo
+  carteleraCarousel.addEventListener('click', (e) => {
+    if (e.target.tagName === 'IMG') {
+      let tempSrc = mainCartelera.src;
+      mainCartelera.src = e.target.src;
+      e.target.src = tempSrc;
+    }
+  });

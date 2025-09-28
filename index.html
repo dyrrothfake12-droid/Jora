@@ -259,6 +259,56 @@
   color: #111;
 }
 
+.overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    z-index: 1000;
+    color: white;
+  }
+  .overlay.active { display: flex; }
+
+  .main-flyer {
+    max-width: 80%;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+
+  .flyer-carousel {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  .flyer-carousel img {
+    width: 120px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .flyer-carousel img:hover {
+    transform: scale(1.1);
+  }
+
+  .btn-back {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ff4444;
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
   </style>
 </head>
 <body>
@@ -275,11 +325,12 @@
 <div id="modalEventos" class="modal">
   <div class="modal-content">
     <button class="close-btn" onclick="cerrarModal('modalEventos')">✕</button>
-    <h2>Próximos Eventos</h2>
+    <h2>Eventos</h2>
     <div class="flyer-grande">
       <img src="imagenes/flayer001.jpg" alt="Evento actual">
     </div>
     <h3 style="margin:12px 0;color:var(--orange)">Eventos Pasados</h3>
+    
     <div class="flyer-carousel">
       <img src="imagenes/flayer002.jpg" alt="Flyer 1">
       <img src="imagenes/flayer003.jpg" alt="Flyer 2">
@@ -369,7 +420,22 @@
 </div>
 <div class="cta-row reveal" style="margin-top:32px">
   <button class="btn" id="cta-register">Crear mi QR</button>
-  <button class="ghost">Ver cartelera</button>
+  <button class="ghost" id="btnCartelera">Ver cartelera</button>
+</div>
+
+<div class="overlay" id="overlayCartelera">
+  <button class="btn-back" onclick="cerrarOverlay('overlayCartelera')">✕</button>
+  <h2 style="margin-top:40px;">CARTELERA</h2>
+
+  <!-- Flyer principal -->
+  <img id="mainCartelera" class="main-flyer" src="imagenes/flayer001.jpg" alt="Flyer Principal">
+
+  <!-- Flyers pasados -->
+  <div class="flyer-carousel" id="carteleraCarousel">
+    <img src="imagenes/flayer001.jpg" alt="Flyer 1">
+    <img src="imagenes/flayer002.jpg" alt="Flyer 2">
+    <img src="imagenes/flayer003.jpg" alt="Flyer 3">
+  </div>
 </div>
 
 
