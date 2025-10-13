@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home - Jora Discoteck</title>
+
   <style>
     body {
       margin: 0;
@@ -26,41 +27,29 @@
       z-index: 1000;
       border-bottom: 2px solid #ff6600;
     }
+
     header img {
       height: 40px;
     }
+
     header .menu {
       font-size: 1.5rem;
       color: #ff6600;
       cursor: pointer;
     }
 
-    /* Cuadro marcador */
-    .scoreboard {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: #000;
-      color: #ff0000;
-      font-family: 'Courier New', monospace;
-      text-align: center;
-      padding: 4px 0;
-      letter-spacing: 10px;
-      font-size: 0.9rem;
-      z-index: 2000;
-      border-bottom: 2px solid #ff0000;
-      box-shadow: 0 0 15px #ff0000;
-    }
-
     /* Bienvenida */
     .hero {
-  margin-top: 90px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  height: 200px; /* 🔹 Ajusta la altura aquí */
-}
-
+      margin-top: 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      height: 200px; /* Altura del video */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
     /* Video de fondo */
     .hero video {
@@ -74,7 +63,7 @@
       opacity: 0.4;
     }
 
-    /* Capa oscura para contraste */
+    /* Capa oscura */
     .hero::after {
       content: "";
       position: absolute;
@@ -86,44 +75,12 @@
       z-index: 2;
     }
 
-    /* Cartel giratorio */
-    .rotating-banner {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #fff;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 100%;
-      position: relative;
-      background: linear-gradient(to right, rgba(255, 102, 0, 0.2), transparent, rgba(255, 102, 0, 0.2));
-      padding: 10px 0;
-      border-top: 2px solid #ff6600;
-      border-bottom: 2px solid #ff6600;
-      letter-spacing: 0;
-      z-index: 3;
-    }
-
-    .rotating-banner span {
-      display: inline-block;
-      animation: scrollLeft 15s linear infinite;
-    }
-
-    @keyframes scrollLeft {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .rotating-banner span::after {
-      content: attr(data-text);
-    }
-
     .hero h1 {
       font-size: 2.8rem;
       color: #ffffff;
       text-shadow: 0 0 10px #ff6600, 0 0 25px #ff3300, 0 0 40px #ff6600;
       animation: glow 2s infinite alternate;
-      margin-top: 70px;
+      margin-top: 0;
       position: relative;
       z-index: 3;
     }
@@ -141,20 +98,54 @@
       to { text-shadow: 0 0 25px #ff3300, 0 0 40px #ff6600; }
     }
 
-    /* Promociones */
+    /* Cartel giratorio */
+    .rotating-banner {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      background: linear-gradient(to right, rgba(255, 102, 0, 0.2), transparent, rgba(255, 102, 0, 0.2));
+      padding: 10px 0;
+      border-top: 2px solid #ff6600;
+      border-bottom: 2px solid #ff6600;
+      z-index: 3;
+    }
+
+    .rotating-banner span {
+      display: inline-block;
+      animation: scrollLeft 15s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .rotating-banner span::after {
+      content: attr(data-text);
+    }
+
+    /* Secciones generales */
     .section {
       padding: 40px 20px;
       text-align: center;
     }
+
     .section h2 {
       font-size: 1.8rem;
       color: #ff6600;
       margin-bottom: 20px;
     }
+
     .cards {
       display: grid;
       gap: 20px;
     }
+
     .card {
       background: #111;
       border: 2px solid #ff6600;
@@ -163,9 +154,11 @@
       box-shadow: 0 0 15px #ff6600;
       transition: transform 0.3s;
     }
+
     .card:hover {
       transform: scale(1.05);
     }
+
     .card img {
       width: 100%;
       border-radius: 8px;
@@ -182,6 +175,7 @@
       border-radius: 12px;
       box-shadow: 0 0 15px #ff6600;
     }
+
     .carousel img {
       position: absolute;
       width: 100%;
@@ -190,6 +184,7 @@
       opacity: 0;
       transition: opacity 1s ease-in-out;
     }
+
     .carousel img.active {
       opacity: 1;
     }
@@ -204,10 +199,12 @@
       margin-top: 20px;
       box-shadow: 0 0 15px #ff6600;
     }
+
     .reservacion h3 {
       margin-bottom: 15px;
       color: #ff6600;
     }
+
     .reservacion button {
       background: #ff6600;
       border: none;
@@ -218,6 +215,7 @@
       cursor: pointer;
       transition: 0.3s;
     }
+
     .reservacion button:hover {
       background: #ff3300;
       box-shadow: 0 0 15px #ff6600;
@@ -231,16 +229,19 @@
       border-top: 2px solid #ff6600;
       margin-top: 30px;
     }
+
     footer a {
       color: #ff6600;
       text-decoration: none;
       margin: 0 10px;
     }
+
     footer a:hover {
       text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
 
   <!-- Header -->
@@ -249,20 +250,21 @@
     <div class="menu">☰</div>
   </header>
 
-  <!-- Bienvenida -->
+  <!-- Sección Hero -->
   <div class="hero">
     <video autoplay muted loop playsinline>
       <source src="videos/discotec2vid.mp4" type="video/mp4">
     </video>
 
-    <div class="rotating-banner">
-      <span data-text="LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER -">
-        LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - 
-      </span>
-    </div>
-
-    <h1>Jora Discoteck</h1>
+    <h1>JORA DISCOTECK</h1>
     <p>¡Vive la mejor experiencia nocturna!</p>
+  </div>
+
+  <!-- Banner -->
+  <div class="rotating-banner">
+    <span data-text="LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - ">
+      LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - 
+    </span>
   </div>
 
   <!-- Promociones -->
@@ -319,4 +321,5 @@
     }, 3000);
   </script>
 </body>
+
 </html>
