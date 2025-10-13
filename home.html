@@ -1,17 +1,57 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Jora Discoteck</title>
-  <style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Home - Jora Discoteck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poller+One&family=Smooch+Sans:wght@700&display=swap" rel="stylesheet">
+ <style>
+    /* ... tu CSS comienza aquí ... */
     body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(to bottom, #000000, #1a1a1a);
-      color: white;
-      overflow-x: hidden;
-    }
+   margin: 0;
+   font-family: 'Arial', sans-serif;
+   /* 🗑️ ELIMINAR O COMENTAR la propiedad background. El fondo ahora lo hace el efecto: 
+      background: linear-gradient(to bottom, #000000, #1a1a1a); */
+      background-color: #000; /* Asegurar que el fondo base es negro puro */
+   color: white;
+   overflow-x: hidden;
+  }
+
+  /* 🛠️ NUEVO: Efecto de fondo de luces/lasers de discoteca */
+.background-effects {
+  position: fixed; /* Fija el fondo detrás de todo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Mantiene el fondo detrás del contenido */
+
+  /* Configuración de las luces */
+  background: radial-gradient(
+    circle at 50% 50%, /* Posición inicial centrada */
+    rgba(255, 145, 0, 0.212) 0%,  /* Magenta suave */
+    rgba(255, 51, 0, 0.178) 15%, /* Cian suave */
+    rgba(0, 0, 0, 1) 50%          /* Fondo negro */
+  );
+  
+  background-size: 300% 300%; /* Hace el gradiente grande para animar */
+  animation: moveLight 20s ease-in-out infinite alternate; /* Movimiento lento */
+  opacity: 0.8; /* Suaviza el brillo */
+  pointer-events: none; /* Evita interferir con clics del usuario */
+}
+
+/* 🛠️ Animación para mover el centro de las luces */
+@keyframes moveLight {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 50% 100%;
+  }
+}
 
     /* Header */
     header {
@@ -24,7 +64,8 @@
       justify-content: space-between;
       align-items: center;
       z-index: 1000;
-      border-bottom: 2px solid #ff6600;
+      border-bottom: 2px solid #38383856;
+      font-family: 'Bungee', sans-serif;
     }
     header img {
       height: 40px;
@@ -35,59 +76,55 @@
       cursor: pointer;
     }
 
-    /* Cuadro marcador */
-    .scoreboard {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: #000;
-      color: #ff0000;
-      font-family: 'Courier New', monospace;
-      text-align: center;
-      padding: 4px 0;
-      letter-spacing: 10px;
-      font-size: 0.9rem;
-      z-index: 2000;
-      border-bottom: 2px solid #ff0000;
-      box-shadow: 0 0 15px #ff0000;
-    }
+    /* === Contador de tokens (parte superior del header) === */
+header .token-counter {
+  display: flex;
+  align-items: center;
+  background: #1a1a1a;
+  border: 1px solid #ff6600;
+  border-radius: 20px;
+  padding: 4px 10px;
+  margin-left: auto; /* Empuja el contador a la derecha */
+  margin-right: 15px; /* Espacio antes del ícono de menú */
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  box-shadow: 0 0 5px #ff6600;
+  z-index: 1001; /* Asegura que esté por encima del contenido */
+}
 
-    /* Bienvenida */
-    .hero {
-  margin-top: 90px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  height: 200px; /* 🔹 Ajusta la altura aquí */
+header .token-counter span {
+  margin-right: 8px;
+  letter-spacing: 1px;
+}
+
+/* === Botón "+" para agregar tokens === */
+header .add-token-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  background: #00ff00; /* Fondo verde */
+  color: #000000; /* Texto negro */
+  border-radius: 50%; /* Botón circular */
+  text-decoration: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 0 8px #00ff00; /* Efecto neón verde */
+}
+
+header .add-token-btn:hover {
+  background: #33ff33;
+  box-shadow: 0 0 15px #33ff33;
 }
 
 
-    /* Video de fondo */
-    .hero video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-      opacity: 0.4;
-    }
-
-    /* Capa oscura para contraste */
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 2;
-    }
-
-    /* Cartel giratorio */
+    /* Banner giratorio */
     .rotating-banner {
+      margin-top: 66px;
+      font-family: 'Smooch Sans', sans-serif;
       font-size: 2rem;
       font-weight: bold;
       color: #fff;
@@ -102,6 +139,7 @@
       border-bottom: 2px solid #ff6600;
       letter-spacing: 0;
       z-index: 3;
+      
     }
 
     .rotating-banner span {
@@ -118,15 +156,51 @@
       content: attr(data-text);
     }
 
-    .hero h1 {
-      font-size: 2.8rem;
-      color: #ffffff;
-      text-shadow: 0 0 10px #ff6600, 0 0 25px #ff3300, 0 0 40px #ff6600;
-      animation: glow 2s infinite alternate;
-      margin-top: 70px;
+    /* Hero */
+    .hero {
+      margin-top: 0;
+      text-align: center;
       position: relative;
-      z-index: 3;
+      overflow: hidden;
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
+
+    .hero video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2;
+    }
+
+    .hero h1 {
+font-size: 2.0rem;
+color: #ffffff;
+ animation: glow 2s infinite alternate;
+ margin-top: 0; 
+ margin-bottom: 0; 
+ position: relative;
+ z-index: 3;
+ font-family: 'Poller One', serif;
+ }
 
     .hero p {
       margin-top: 10px;
@@ -141,36 +215,134 @@
       to { text-shadow: 0 0 25px #ff3300, 0 0 40px #ff6600; }
     }
 
+    .hero::after {
+  content: "";
+  position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.5);
+   z-index: 2;
+  }
+
+    /* ⚡ NUEVO: Pseudo-elemento para el borde inferior tipo rayo */
+    .hero::before { /* Usamos ::before para no sobreescribir el ::after existente */
+      content: "";
+      position: absolute;
+      bottom: -2px; /* Ligeramente por debajo del hero para que no se superponga */
+      left: 0;
+      width: 100%;
+      height: 4px; /* Altura del borde */
+      background: linear-gradient(90deg, #ff6600 0%, #ffee00 25%, #ff6600 50%, #eeff00 75%, #ff6600 100%);
+      background-size: 200% 100%; /* Para que el gradiente sea más largo y se mueva */
+      animation: neonBorder 3s linear infinite; /* Animación del gradiente */
+      z-index: 4; /* Asegúrate de que esté por encima de todo lo demás en el hero */
+    }
+
+
+/* ... tu CSS para .rotating-banner, .hero h1, etc. ... */
+
+/* ⚡ NUEVO: Animación para el borde tipo rayo */
+@keyframes neonBorder {
+  0% {
+    background-position: 0% 50%;
+    filter: brightness(1); /* Inicio del brillo */
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: brightness(1.5); /* Pico de brillo en el medio */
+  }
+  100% {
+    background-position: 200% 50%; /* Asegura que el gradiente se mueva completamente */
+    filter: brightness(1); /* Fin del brillo */
+  }
+}
+
     /* Promociones */
     .section {
       padding: 40px 20px;
       text-align: center;
     }
     .section h2 {
-      font-size: 1.8rem;
-      color: #ff6600;
-      margin-bottom: 20px;
-    }
-    .cards {
-      display: grid;
-      gap: 20px;
-    }
-    .card {
-      background: #111;
-      border: 2px solid #ff6600;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 15px #ff6600;
-      transition: transform 0.3s;
-    }
-    .card:hover {
-      transform: scale(1.05);
-    }
-    .card img {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
+  font-size: 1.8rem;
+  color: #ff6600;
+  margin-bottom: 20px;
+  font-family: 'Bungee', sans-serif;
+}
+
+.cards {
+  display: grid;
+ grid-template-columns: 1fr 1fr; /* 1fr y 1fr hacen dos columnas del mismo ancho */
+ gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #111;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+  transition: transform 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+/* Borde animado */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 90deg,
+    #00ffff 90deg,
+    #ff00ff 180deg,
+    #ff6600 270deg,
+    #00ff00 360deg
+  );
+  animation: rotateBorder 4s linear infinite;
+  z-index: 0;
+}
+
+/* Fondo interior oscuro */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: #111;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+/* Contenido encima del brillo */
+.card img,
+.card p {
+  position: relative;
+  z-index: 2;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Animación de rotación del borde */
+@keyframes rotateBorder {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
     /* Novedades */
     .carousel {
@@ -223,6 +395,91 @@
       box-shadow: 0 0 15px #ff6600;
     }
 
+    /* 🛠️ NUEVO: Estilos para el Contenedor Principal de Reservaciones */
+.reservacion-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Columna única por defecto */
+  max-width: 550px; /* Ancho ajustado para reducir el tamaño del flyer */
+  margin: 0 auto;
+  background: #111;
+  border: 2px solid #ff6600;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #ff6600;
+  overflow: hidden;
+}
+
+/* Estilos para el Flyer */
+.reservacion-flyer img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Estilos para la Información y Detalles */
+.reservacion-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.reservacion-info h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #00ffff;
+  text-align: center;
+  font-family: 'Bungee', sans-serif;
+  text-transform: uppercase;
+}
+
+.detalles-reserva {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  font-family: 'Smooch Sans', sans-serif; /* Fuente legible */
+  font-size: 1.2rem;
+  color: #ddd;
+}
+
+.detalles-reserva li {
+  margin-bottom: 8px;
+}
+
+/* 🛠️ Estilos del botón de WhatsApp */
+.reservar-btn {
+  display: block;
+  width: 100%;
+  background: #25d366; /* Color de WhatsApp */
+  border: none;
+  color: white;
+  padding: 12px 0px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 15px #25d366;
+}
+
+.reservar-btn:hover {
+  background: #128c7e;
+  box-shadow: 0 0 20px #128c7e;
+}
+
+/* 🖥️ Estilo Responsivo (Dos columnas en desktop) */
+@media (min-width: 600px) {
+  .reservacion-container {
+    grid-template-columns: 0.8fr 1.2fr; /* Imagen más pequeña en desktop */
+    text-align: left;
+  }
+
+  .reservacion-flyer img {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+
     /* Footer */
     footer {
       background: #000;
@@ -242,64 +499,74 @@
   </style>
 </head>
 <body>
-
-  <!-- Header -->
+<div class="background-effects"></div> 
   <header>
-    <img src="imagenes/LogoJora.png" alt="Jora Logo">
-    <div class="menu">☰</div>
-  </header>
+  <img src="imagenes/LogoJora.png" alt="Jora Logo">
 
-  <!-- Bienvenida -->
+    <div class="token-counter">
+        <span>TOKEN 0</span>
+        <a href="perfil.html" class="add-token-btn">
+            +
+        </a>
+    </div>
+
+  <div class="menu">☰</div>
+ </header>
+  <div class="rotating-banner">
+    <span data-text="LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER -">
+      LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER -
+    </span>
+  </div>
+
   <div class="hero">
     <video autoplay muted loop playsinline>
       <source src="videos/discotec2vid.mp4" type="video/mp4">
     </video>
-
-    <div class="rotating-banner">
-      <span data-text="LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER -">
-        LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - LA VIDA ES UNA FIESTA, Y ESTA NOCHE SE BAILA HASTA EL AMANECER - 
-      </span>
-    </div>
-
-    <h1>Jora Discoteck</h1>
-    <p>¡Vive la mejor experiencia nocturna!</p>
+    <h1>JORA DISCOTECK</h1>
   </div>
 
-  <!-- Promociones -->
   <div class="section">
-    <h2>Promociones</h2>
+    <h2>PROXIMOS EVENTOS</h2>
     <div class="cards">
       <div class="card">
-        <img src="imagenes/promo1.jpg" alt="Promo 1">
+        <img src="imagenes/flayer001.jpg" alt="Promo 1">
         <p>2x1 en cócteles hasta la medianoche</p>
       </div>
       <div class="card">
-        <img src="imagenes/promo2.jpg" alt="Promo 2">
+        <img src="imagenes/flayer002.jpg" alt="Promo 2">
         <p>Entrada libre para damas hasta las 11 PM</p>
       </div>
     </div>
   </div>
 
-  <!-- Novedades -->
-  <div class="section">
-    <h2>Novedades</h2>
-    <div class="carousel">
-      <img src="imagenes/novedad1.jpg" class="active" alt="Novedad 1">
-      <img src="imagenes/novedad2.jpg" alt="Novedad 2">
-      <img src="imagenes/novedad3.jpg" alt="Novedad 3">
+
+  <div class="section" id="reservas">
+  <h2>RESERVACIONES</h2>
+
+  <div class="reservacion-container">
+    <div class="reservacion-flyer">
+      <img src="imagenes/cumple.jpg" alt="Flyer Celebración de Cumpleaños">
+    </div>
+
+    <div class="reservacion-info">
+      <h3>¡CELEBRA TU CUMPLEAÑOS CON NOSOTROS!</h3>
+      <ul class="detalles-reserva">
+        <li>✅ Barra libre para ti.</li>
+        <li>✅ Invitados gratis</li>
+        <li>✅ Shot de bienvenida.</li>
+        <li>✅ Pastel sorpresa.</li>
+      </ul>
+
+      <a 
+        href="https://wa.me/91022" 
+        target="_blank" 
+        class="reservar-btn">
+        RESERVAR VÍA WHATSAPP
+      </a>
     </div>
   </div>
+</div>
 
-  <!-- Reservaciones -->
-  <div class="section">
-    <h2>Reservaciones</h2>
-    <div class="reservacion">
-      <h3>¡Celebra tu cumpleaños con nosotros!</h3>
-      <button onclick="alert('Pronto conectaremos con WhatsApp para reservas')">Reservar ahora</button>
-    </div>
-  </div>
-
-  <!-- Footer -->
   <footer>
     <a href="home.html">Inicio</a>
     <a href="#promos">Promociones</a>
@@ -318,5 +585,6 @@
       images[current].classList.add("active");
     }, 3000);
   </script>
+
 </body>
 </html>
