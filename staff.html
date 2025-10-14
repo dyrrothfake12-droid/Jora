@@ -44,8 +44,9 @@
       const pass = staffPass.value.trim();
 
       const validUser = staffAccounts.find(
-        (acc) => acc.user === user && acc.pass === pass
-      );
+  (acc) => acc.name === user && acc.password === pass
+);
+
 
       if (validUser) {
         localStorage.setItem("staffLoggedIn", "true");
