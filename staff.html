@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Staff - Jora Disco Club</title>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // Config Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFsWd-NC2wgpBY6Y-5xaup6JqShHtGyiI",
+      authDomain: "joradiscoclub.firebaseapp.com",
+      projectId: "joradiscoclub",
+      storageBucket: "joradiscoclub.firebasestorage.app",
+      messagingSenderId: "161653684557",
+      appId: "1:161653684557:web:9ae395935efcbb3ad25f04",
+      measurementId: "G-DE8XG24SK1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ---- LOGIN STAFF ----
+    const staffAccounts = [
+      { user: "bartender", pass: "jora2025" },
+      { user: "admin", pass: "controlvip" }
+    ];
+
+    const loginBtn = document.getElementById("loginBtn");
+    const staffUser = document.getElementById("staffUser");
+    const staffPass = document.getElementById("staffPass");
+    const errorMsg = document.getElementById("errorMsg");
+    const loginForm = document.getElementById("login-form");
+    const staffPanel = document.getElementById("staff-panel");
+
+    loginBtn.addEventListener("click", () => {
+      const user = staffUser.value.trim();
+      const pass = staffPass.value.trim();
+
+      const validUser = staffAccounts.find(
+        (acc) => acc.user === user && acc.pass === pass
+      );
+
+      if (validUser) {
+        localStorage.setItem("staffLoggedIn", "true");
+        loginForm.style.display = "none";
+        staffPanel.style.display = "block";
+      } else {
+        errorMsg.textContent = "❌ Usuario o contraseña incorrectos";
+      }
+    });
+
+    window.addEventListener("load", () => {
+      if (localStorage.getItem("staffLoggedIn") === "true") {
+        loginForm.style.display = "none";
+        staffPanel.style.display = "block";
+      }
+    });
+
+    // ---- ESCANER QR ----
+    const video = document.getElementById("qr-video");
+    const resultBox = document.getElementById("scan-result");
+    const tokensInput = document.getElementById("tokensPerScan");
+    const autoModeCheckbox = document.getElementById("autoMode");
+    const historyList = document.getElementById("scan-history");
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true);
+        await video.play();
+        requestAnimationFrame(scanFrame);
+      } catch (error) {
+        alert("No se pudo acceder a la cámara: " + error.message);
+      }
+    }
+
+    async function scanFrame() {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        // Usar librería jsQR para detectar código
+        import("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js").then(({ default: jsQR }) => {
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code) {
+            handleScan(code.data);
+          }
+        });
+      }
+      requestAnimationFrame(scanFrame);
+    }
+
+    async function handleScan(uidCliente) {
+      if (!uidCliente) return;
+      resultBox.textContent = `Cliente detectado: ${uidCliente}`;
+      const tokensToAdd = parseInt(tokensInput.value) || 0;
+
+      try {
+        const ref = doc(db, "usuarios", uidCliente);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          await updateDoc(ref, {
+            tokenSaldo: increment(tokensToAdd)
+          });
+
+          const cliente = snap.data().nombre || "Cliente sin nombre";
+          const li = document.createElement("li");
+          li.textContent = `${cliente} (+${tokensToAdd} tokens)`;
+          historyList.prepend(li);
+
+          if (autoModeCheckbox.checked) {
+            // En modo automático, procesa sin confirmación
+            resultBox.textContent = `✅ +${tokensToAdd} tokens agregados automáticamente`;
+          } else {
+            alert(`✅ Tokens agregados a ${cliente}`);
+          }
+        } else {
+          alert("❌ Cliente no encontrado en la base de datos");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error al agregar tokens: " + error.message);
+      }
+    }
+
+    document.getElementById("startScanBtn").addEventListener("click", startCamera);
+  </script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #000, #111);
+      color: white;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      width: 300px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    button {
+      background: #ff0055;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ff3377;
+    }
+
+    #staff-panel {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    ul li {
+      background: rgba(255,255,255,0.1);
+      padding: 8px;
+      border-radius: 8px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN STAFF -->
+  <div class="login-container" id="login-form">
+    <h2>Acceso Staff 👷‍♂️</h2>
+    <input type="text" id="staffUser" placeholder="Usuario" required />
+    <input type="password" id="staffPass" placeholder="Contraseña" required />
+    <button id="loginBtn">Ingresar</button>
+    <p id="errorMsg" style="color:#ff8080; font-size:14px;"></p>
+  </div>
+
+  <!-- PANEL STAFF -->
+  <div id="staff-panel">
+    <h2>🎉 Panel Staff</h2>
+
+    <label>Tokens por cliente:</label>
+    <input type="number" id="tokensPerScan" value="2" min="1" />
+
+    <label>
+      <input type="checkbox" id="autoMode" checked />
+      Modo automático
+    </label>
+
+    <button id="startScanBtn">Iniciar escáner QR 📷</button>
+
+    <video id="qr-video" autoplay></video>
+    <p id="scan-result">Esperando escaneo...</p>
+
+    <h3>Últimos escaneos</h3>
+    <ul id="scan-history"></ul>
+  </div>
+</body>
+</html>

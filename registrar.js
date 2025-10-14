@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// Configuración de Firebase
+// 🔥 Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCFsWd-NC2wgpBY6Y-5xaup6JqShHtGyiI",
   authDomain: "joradiscoclub.firebaseapp.com",
@@ -13,82 +13,87 @@ const firebaseConfig = {
   measurementId: "G-DE8XG24SK1"
 };
 
-// Inicializar Firebase
+// 🚀 Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Referencias al DOM
-const form = document.getElementById('registerForm');
-const popup = document.getElementById('popup');
-
-// Función para mostrar notificaciones personalizadas
+// 🧩 Función para mostrar notificaciones
 function showPopup(message, type = "success") {
+  const popup = document.getElementById('popup');
   popup.innerHTML = `
-    <strong>${type === "success" ? "✅" : "⚠️"} ${type === "success" ? "Registro exitoso" : "Error"}</strong><br>
+    <strong>${type === "success" ? "✅ Registro exitoso" : "⚠️ Error"}</strong><br>
     ${message}
   `;
   popup.style.background = type === "success" ? "#32cc2cff" : "#e74c3c";
   popup.style.display = 'block';
-
-  setTimeout(() => {
-    popup.style.display = 'none';
-  }, 4000);
+  setTimeout(() => popup.style.display = 'none', 4000);
 }
 
-// Evento de envío del formulario
-form.addEventListener('submit', async (e) => {
+// 🧠 Generar token aleatorio
+function generarToken(longitud = 20) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({ length: longitud }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+}
+
+// 🆔 Generar ID único para el usuario
+function generarIdUnico() {
+  return 'JORA-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+}
+
+// 🔳 Generar QR único usando API pública
+function generarQrUrl(idUnico) {
+  const data = `https://joradiscoclub.com/recargar?id=${idUnico}`; 
+  return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(data)}`;
+}
+
+// 📝 Evento de registro
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Obtener valores del formulario
-  const email = form['email'].value;
-  const password = form['password'].value;
-  const nombre = form['nombre'].value;
-  const celular = form['telefono'].value;
+  const email = e.target['email'].value;
+  const password = e.target['password'].value;
+  const nombre = e.target['nombre'].value;
+  const celular = e.target['telefono'].value;
 
   try {
-    // Crear usuario en Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Guardar datos adicionales en Firestore
+    // Generar datos adicionales
+    const token = generarToken();
+    const idUnico = generarIdUnico();
+    const qrUrl = generarQrUrl(idUnico);
+
+    // Guardar datos en Firestore
     await setDoc(doc(db, "usuarios", user.uid), {
       nombre,
       email,
       celular,
-      password,
+      tokenSaldo: 0, // saldo inicial de tokens
+      token,
+      idUnico,
+      qrUrl,
       creado: new Date()
     });
 
-    // Mostrar popup de éxito
-    showPopup("¿Listo para bailar toda la noche? ¡Bienvenido a la fiesta!", "success");
+    showPopup("¡Bienvenido a Jora Discoteck! Tu cuenta fue creada exitosamente.", "success");
 
-    // Confeti 🎉 (si tienes la librería de confetti)
+    // Confeti 🎉
     if (typeof confetti === "function") {
-      confetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.6 }
-      });
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
     }
 
-    // Redirigir después de unos segundos
-    setTimeout(() => {
-      window.location.href = "login.html";
-    }, 4000);
+    setTimeout(() => window.location.href = "login.html", 4000);
 
   } catch (error) {
-    console.error("❌ Error en el registro:", error.message);
-
-    // Personalizar mensajes de error
+    console.error("❌ Error en el registro:", error);
     if (error.code === "auth/email-already-in-use") {
-      showPopup("El correo ya está en uso. Por favor, usa otro correo electrónico.", "error");
+      showPopup("El correo ya está en uso.", "error");
     } else if (error.code === "auth/weak-password") {
-      showPopup("La contraseña es demasiado débil. Usa una más segura.", "error");
-    } else if (error.code === "auth/invalid-email") {
-      showPopup("El formato del correo no es válido.", "error");
+      showPopup("Contraseña demasiado débil.", "error");
     } else {
-      showPopup("Ocurrió un error inesperado: " + error.message, "error");
+      showPopup(error.message, "error");
     }
   }
 });

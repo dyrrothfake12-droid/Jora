@@ -7,7 +7,7 @@
     <!-- Mantiene las mismas fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poller+One&family=Smooch+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Kanit:wght@400;700&family=Poller+One&family=Smooch+Sans:wght@700&display=swap" rel="stylesheet">
     
     <style>
         /* Base y Efectos de Fondo (mismos de home.html) */
@@ -118,13 +118,13 @@
             text-align: center;
             background: rgba(17, 17, 17, 0.8);
             border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 102, 0, 0.6);
+            box-shadow: 0 0 30px rgba(39, 39, 39, 0.075);
         }
 
         .qr-container h2 {
             font-family: 'Poller One', serif;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
+            color: #ffffff;
+            text-shadow: 0 0 10px #000000;
             margin-bottom: 30px;
             border-bottom: 2px solid #ff6600;
             padding-bottom: 10px;
@@ -144,7 +144,7 @@
             border-radius: 8px;
             display: inline-block;
             margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7); /* Sombra neón cian para el QR */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Sombra neón cian para el QR */
         }
         
         .qr-box img { 
@@ -233,7 +233,7 @@
             padding: 12px;
             border-radius: 8px;
             text-decoration: none;
-            font-family: 'Bungee', sans-serif;
+            font-family: 'Kanit', sans-serif;
             font-size: 1rem;
             transition: background 0.3s, box-shadow 0.3s;
             text-align: center;
@@ -259,12 +259,12 @@
             width: 100%;
             z-index: 1010;
             background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
-                url('imagenes/fondo-menu.png') no-repeat center center; /* RUTA DE TU FONDO */
+                url('imagenes/menu-fondo.png') no-repeat center center; /* RUTA DE TU FONDO */
             background-size: cover;
             padding: 10px 0;
             border-top: none;
             border-radius: 25px 25px 0 0;
-            box-shadow: 0 -5px 30px rgba(255, 51, 0, 0.8);
+            box-shadow: 0 -5px 30px rgba(58, 58, 58, 0.199);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -292,8 +292,8 @@
             height: 32px;
             object-fit: contain;
             margin-bottom: 3px;
-            animation: neonGlow 3s ease-in-out infinite alternate;
-            filter: drop-shadow(0 0 6px rgba(255, 102, 0, 0.9));
+            animation: neonGlow 10s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 6px rgba(255, 102, 0, 0.562));
         }
         
         .menu-icon-img.active-page {
@@ -346,27 +346,28 @@
         </div>
 
         <div class="action-buttons">
-            <a href="#">COMPRAR TOKENS</a>
-            <a href="#">HISTORIAL DE COMPRAS</a>
-            <a href="#">AJUSTES DE CUENTA</a>
-            <a href="#">CERRAR SESIÓN</a>
-        </div>
+    <a href="#">COMPRAR TOKENS</a>
+    <a href="#">HISTORIAL DE COMPRAS</a>
+    <a href="#">AJUSTES DE CUENTA</a>
+    <a href="#" id="logout-btn">CERRAR SESIÓN</a> <!-- 👈 Agregamos ID -->
+</div>
+
     </div>
 
     <!-- --------------------- FOOTER (Menú fijo inferior) --------------------- -->
     <footer>
         <a href="home.html">
-            <img src="iconos/inicio.png" alt="Inicio" class="menu-icon-img">
+            <img src="imagenes/A-INICIO.png" alt="Inicio" class="menu-icon-img">
             <span>INICIO</span>
         </a>
         
         <a href="#promos">
-            <img src="iconos/promociones.png" alt="Promociones" class="menu-icon-img">
+            <img src="imagenes/A-PROMOCION.png" alt="Promociones" class="menu-icon-img">
             <span>PROMOCIONES</span>
         </a>
         
         <a href="perfil.html">
-            <img src="iconos/perfil.png" alt="Perfil" class="menu-icon-img active-page">
+            <img src="imagenes/A-PERFIL.png" alt="Perfil" class="menu-icon-img active-page">
             <span>PERFIL</span>
         </a>
     </footer>

@@ -1,122 +1,87 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+// 🔥 Config Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCFsWd-NC2wgpBY6Y-5xaup6JqShHtGyiI",
+  authDomain: "joradiscoclub.firebaseapp.com",
+  projectId: "joradiscoclub",
+  storageBucket: "joradiscoclub.firebasestorage.app",
+  messagingSenderId: "161653684557",
+  appId: "1:161653684557:web:9ae395935efcbb3ad25f04",
+  measurementId: "G-DE8XG24SK1"
+};
 
-        // Establecer nivel de log de Firebase
-        setLogLevel('Debug');
+// 🚀 Inicialización
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-        // 1. Configuración e Inicialización de Firebase (USANDO VARIABLES GLOBALES MANDATORIAS)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+// 🧩 Referencias HTML
+const qrCodeImg = document.getElementById('qr-code-img');
+const userIdDisplay = document.getElementById('user-id-display');
+const tokenBalanceDisplay = document.getElementById('token-balance-display');
+const headerTokenDisplay = document.getElementById('header-token-display');
+const userNameDisplay = document.getElementById('user-name-display');
+const userEmailDisplay = document.getElementById('user-email-display');
+const loadingMessage = document.getElementById('loading-message');
+const logoutBtn = document.getElementById('logout-btn'); // 👈 botón cerrar sesión
 
-        if (!firebaseConfig) {
-            console.error("Firebase config no está disponible. No se puede inicializar.");
-            document.getElementById('loading-message').textContent = "Error: Configuración de Firebase no encontrada.";
-            // Si la configuración no existe, salimos del script
-            return; 
-        }
+// 🧠 Función para cargar datos del perfil
+async function loadProfile(uid) {
+  try {
+    const userRef = doc(db, "usuarios", uid);
+    const docSnap = await getDoc(userRef);
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
 
-        // Variables de la UI
-        const qrCodeImg = document.getElementById('qr-code-img');
-        const userIdDisplay = document.getElementById('user-id-display');
-        const tokenBalanceDisplay = document.getElementById('token-balance-display');
-        const headerTokenDisplay = document.getElementById('header-token-display');
-        const userNameDisplay = document.getElementById('user-name-display');
-        const userEmailDisplay = document.getElementById('user-email-display');
-        const loadingMessage = document.getElementById('loading-message');
+      userNameDisplay.textContent = data.nombre || "Sin nombre";
+      userEmailDisplay.textContent = data.email || "Sin correo";
+      tokenBalanceDisplay.textContent = data.tokenSaldo ?? 0;
+      headerTokenDisplay.textContent = `TOKENS: ${data.tokenSaldo ?? 0}`;
+      userIdDisplay.textContent = data.idUnico || uid;
 
-        /**
-         * Genera la URL del QR basado en el UID del usuario.
-         * @param {string} uid El ID de usuario (UID) de Firebase.
-         * @returns {string} URL para la imagen del QR.
-         */
-        function generateQrCodeUrl(uid) {
-            // Se usa una API de terceros para generar el QR.
-            // La data que contiene el QR es el UID único del usuario.
-            const qrData = `JoraDiscoteck_UID_${uid}`;
-            return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}`;
-        }
+      // Mostrar QR si existe
+      if (data.qrUrl) {
+        qrCodeImg.src = data.qrUrl;
+        qrCodeImg.style.display = "block";
+      }
 
-        /**
-         * Carga los datos de perfil y establece el listener en tiempo real (onSnapshot).
-         * @param {string} userId El ID de usuario actual.
-         */
-        function loadUserProfile(userId) {
-            // 1. Generar y mostrar el QR
-            qrCodeImg.src = generateQrCodeUrl(userId);
-            qrCodeImg.style.display = 'block';
-            userIdDisplay.textContent = userId;
+      loadingMessage.style.display = "none";
+    } else {
+      loadingMessage.textContent = "No se encontró el perfil del usuario.";
+    }
+  } catch (error) {
+    console.error("Error al cargar perfil:", error);
+    loadingMessage.textContent = "Error al cargar los datos.";
+  }
+}
 
-            // 2. Establecer listener en Firestore para datos en tiempo real (tokens, nombre, email)
-            // Se asume la colección y estructura de datos privada:
-            // /artifacts/{appId}/users/{userId}/user_data/profile
-            const profileDocRef = doc(db, 'artifacts', appId, 'users', userId, 'user_data', 'profile');
+// 👤 Verificar autenticación
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loadProfile(user.uid);
+  } else {
+    loadingMessage.textContent = "Debes iniciar sesión.";
+    setTimeout(() => window.location.href = "login.html", 2500);
+  }
+});
 
-            const unsubscribe = onSnapshot(profileDocRef, (docSnapshot) => {
-                if (loadingMessage) loadingMessage.style.display = 'none';
-
-                if (docSnapshot.exists()) {
-                    const data = docSnapshot.data();
-                    
-                    // Actualizar Balance de Tokens
-                    const tokens = data.tokens || 0;
-                    tokenBalanceDisplay.textContent = tokens;
-                    headerTokenDisplay.textContent = `TOKENS: ${tokens}`;
-
-                    // Actualizar Datos Personales
-                    userNameDisplay.textContent = data.name || 'Sin Nombre';
-                    userEmailDisplay.textContent = data.email || 'N/A';
-                    
-                } else {
-                    console.warn("Documento de perfil no encontrado. Creando uno por defecto...");
-                    // En un caso real, se debería crear el documento aquí si no existe
-                    // Ejemplo de creación de documento inicial (Solo si es un usuario nuevo)
-                    
-                    // setDoc(profileDocRef, { 
-                    //     name: 'Usuario Nuevo',
-                    //     email: auth.currentUser?.email || 'anonimo@jora.com',
-                    //     tokens: 10 // Regalo de bienvenida
-                    // });
-
-                    tokenBalanceDisplay.textContent = '0';
-                    userNameDisplay.textContent = 'Perfil Vacío';
-                    userEmailDisplay.textContent = 'Sin Datos';
-                }
-            }, (error) => {
-                console.error("Error al escuchar el perfil:", error);
-                document.getElementById('loading-message').textContent = `Error: ${error.message}`;
-            });
-
-            // En una aplicación real, se usaría la función de retorno de unsubscribe
-            // para detener el listener cuando el componente se destruye.
-            return unsubscribe;
-        }
-
-        // 3. Autenticación y Carga Inicial
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // El usuario está autenticado (o ya se autenticó con el token inicial)
-                loadUserProfile(user.uid);
-            } else {
-                // Intentar autenticar con el token inicial o anónimamente
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        // onAuthStateChanged se disparará de nuevo con el usuario
-                    } else {
-                        // Si no hay token inicial, iniciar sesión anónimamente para tener un UID
-                        const anonUser = await signInAnonymously(auth);
-                        loadUserProfile(anonUser.user.uid);
-                    }
-                } catch (error) {
-                    console.error("Error en la autenticación:", error);
-                    document.getElementById('loading-message').textContent = "Error de autenticación. Intente iniciar sesión.";
-                }
-            }
-        });
+// 🚪 Cerrar sesión con validación
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    const confirmar = confirm("¿Seguro que deseas cerrar sesión?");
+    if (confirmar) {
+      try {
+        await signOut(auth);
+        alert("Sesión cerrada correctamente 👋");
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+        alert("❌ Ocurrió un error al cerrar sesión.");
+      }
+    }
+  });
+}
