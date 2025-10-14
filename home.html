@@ -15,6 +15,7 @@
       background-color: #000; /* Asegurar que el fondo base es negro puro */
    color: white;
    overflow-x: hidden;
+   padding-bottom: 60px;
   }
 
   /* 🛠️ NUEVO: Efecto de fondo de luces/lasers de discoteca */
@@ -482,20 +483,76 @@ color: #ffffff;
 
     /* Footer */
     footer {
-      background: #000;
-      padding: 15px;
-      text-align: center;
-      border-top: 2px solid #ff6600;
-      margin-top: 30px;
+    /* Propiedades de Posicionamiento Fijo */
+    position: fixed; /* Fija el footer en relación a la ventana de visualización */
+    bottom: 0; /* Lo coloca en la parte inferior */
+    left: 0;
+    width: 100%; /* Ocupa todo el ancho */
+    z-index: 1010; /* Asegura que esté por encima de todo el contenido */
+   
+   background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+   url('imagenes/menu-fondo.png') no-repeat center center; /* Reemplaza 'imagenes/fondo-menu.png' */
+    background-size: cover;
+    padding: 10px 0; /* Espaciado interno superior/inferior */
+    border-top: none; 
+    border-radius: 25px 25px 0 0;
+    box-shadow: 0 -5px 30px rgba(255, 51, 0, 0.8);
+    /* Configuración Flexbox para los Ítems del Menú */
+    display: flex;
+    justify-content: space-around; /* Distribuye el espacio entre los ítems */
+    align-items: center;
     }
+
     footer a {
-      color: #ff6600;
-      text-decoration: none;
-      margin: 0 10px;
-    }
+    display: flex; /* Para alinear el ícono y el texto verticalmente */
+    flex-direction: column; /* Apila el contenido (ícono y texto) */
+    align-items: center;
+    color: #ff6600; /* Color principal para los enlaces */
+    text-decoration: none;
+    font-size: 0.8rem; /* Tamaño de fuente pequeño para móvil */
+    font-weight: bold;
+    transition: color 0.3s;
+    font-family: 'Bungee', sans-serif; 
+}
     footer a:hover {
       text-decoration: underline;
+      color: #00ffff;
     }
+    .menu-icon {
+    font-size: 1.4rem; /* Tamaño del ícono */
+    margin-bottom: 3px; /* Espacio entre ícono y texto */
+}
+
+.menu-icon-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    
+    /* Aplicar la animación de brillo */
+    animation: neonGlow 3s ease-in-out infinite alternate; 
+    
+    /* Ajuste inicial del brillo */
+    filter: drop-shadow(0 0 6px rgba(255, 102, 0, 0.9)); 
+}
+
+footer a:hover .menu-icon-img {
+    /* El hover puede tener un brillo diferente o más intenso */
+    filter: drop-shadow(0 0 12px #00ffff); 
+}
+
+/* ⚡ Animación para el Brillo Neón Pulsante ⚡ */
+@keyframes neonGlow {
+    0% {
+        filter: drop-shadow(0 0 4px rgba(255, 102, 0, 0.5)); /* Menos brillo */
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 251, 0, 0.596)); /* Brillo máximo */
+    }
+    100% {
+        filter: drop-shadow(0 0 4px rgba(255, 102, 0, 0.479)); /* Vuelve a menos brillo */
+    }
+}
+
   </style>
 </head>
 <body>
@@ -568,11 +625,23 @@ color: #ffffff;
 </div>
 
   <footer>
-    <a href="home.html">Inicio</a>
-    <a href="#promos">Promociones</a>
-    <a href="#reservas">Reservaciones</a>
-    <a href="perfil.html">Perfil</a>
-  </footer>
+  
+  <a href="home.html">
+    <img src="imagenes/A-INICIO.png" alt="Inicio" class="menu-icon-img">
+    <span>INICIO</span>
+  </a>
+  
+  <a href="#promos">
+    <img src="imagenes/A-PROMOCION.png" alt="Promociones" class="menu-icon-img">
+    <span>PROMOCIONES</span>
+  </a>
+  
+  <a href="perfil.html">
+    <img src="imagenes/A-PERFIL.png" alt="Perfil" class="menu-icon-img">
+    <span>PERFIL</span>
+  </a>
+  
+</footer>
 
   <script>
 
