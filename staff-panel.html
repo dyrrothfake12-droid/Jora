@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Staff - Escanear QR</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFsWd-NC2wgpBY6Y-5xaup6JqShHtGyiI",
+      authDomain: "joradiscoclub.firebaseapp.com",
+      projectId: "joradiscoclub",
+      storageBucket: "joradiscoclub.firebasestorage.app",
+      messagingSenderId: "161653684557",
+      appId: "1:161653684557:web:9ae395935efcbb3ad25f04",
+      measurementId: "G-DE8XG24SK1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Validar que hay sesión staff
+    const staffUser = sessionStorage.getItem("staffUser");
+    if (!staffUser) {
+      alert("Acceso denegado. Inicia sesión como staff.");
+      window.location.href = "staff.html";
+    }
+
+    // Variables globales
+    let tokensPorCliente = 1; // valor por defecto
+
+    // Esperar que cargue todo el DOM
+    window.addEventListener("DOMContentLoaded", () => {
+      const tokenInput = document.getElementById("tokenValue");
+      const statusBox = document.getElementById("status");
+      const staffName = document.getElementById("staffName");
+
+      staffName.textContent = staffUser;
+
+      // Escuchar cambios del input
+      tokenInput.addEventListener("input", () => {
+        tokensPorCliente = parseInt(tokenInput.value) || 1;
+      });
+
+      // Inicializar escáner
+      const html5QrCode = new Html5Qrcode("reader");
+      const qrConfig = { fps: 10, qrbox: 250 };
+
+      html5QrCode.start(
+        { facingMode: "environment" },
+        qrConfig,
+        async (decodedText) => {
+          statusBox.textContent = "🔍 Escaneando...";
+
+          try {
+            const uid = decodedText.trim();
+            const userRef = doc(db, "usuarios", uid);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+              const data = userSnap.data();
+              const nuevoSaldo = (data.tokenSaldo || 0) + tokensPorCliente;
+
+              await updateDoc(userRef, { tokenSaldo: nuevoSaldo });
+
+              statusBox.textContent = `✅ Se agregaron ${tokensPorCliente} tokens a ${data.nombre || "usuario"} (Nuevo saldo: ${nuevoSaldo})`;
+
+              // Vibración corta al éxito
+              if (navigator.vibrate) navigator.vibrate(150);
+            } else {
+              statusBox.textContent = "❌ Usuario no encontrado.";
+            }
+          } catch (error) {
+            console.error(error);
+            statusBox.textContent = "⚠️ Error al actualizar tokens.";
+          }
+        },
+        (errorMessage) => {
+          // Ignorar errores pequeños de escaneo
+        }
+      );
+    });
+  </script>
+
+  <!-- Librería del escáner -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+  <style>
+    body {
+      background: #0b0b0b;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #f1c40f;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+      border: 2px solid #f39c12;
+      border-radius: 10px;
+    }
+
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      width: 100px;
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    #status {
+      margin-top: 20px;
+      background: #222;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 15px;
+      min-height: 40px;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Panel Staff</h1>
+  <p>👤 Bienvenido, <span id="staffName"></span></p>
+
+  <div>
+    <label>Tokens por cliente: </label>
+    <input type="number" id="tokenValue" value="1" min="1" />
+  </div>
+
+  <div id="reader"></div>
+  <div id="status">Escanea un código QR...</div>
+
+  <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+
+  <script>
+    function cerrarSesion() {
+      sessionStorage.removeItem("staffUser");
+      window.location.href = "staff.html";
+    }
+  </script>
+</body>
+</html>
